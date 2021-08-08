@@ -71,4 +71,44 @@
   * ERD 파일로 끌어왔으나 문법('' 제거) 및 에러 처리
   * database, table, colum 생성 후 관계 관련 문제점 발견하여 처리진행중
 
- 
+#### 2021.08.08
+* DB ERD 수정 (2차)
+  * 각 테이블 식별 처리시 중복된 컬럼 생성 확인되어 제거
+  * 추후에 식별처리된 테이블 문제 발생 시 Mapping 테이블 생성하여 변경할 예정
+  * Foreign Key 설정
+  * DB TABLE 생성, CONSTRAINT 설정
+  <img width="1037" alt="2차 테이블 수정" src="https://user-images.githubusercontent.com/48265181/128623269-9ee0bd07-158b-4e65-acae-30d05764de35.png">
+  
+* Spring Security
+  * build.gradel에서 의존성 추가
+    * implementation 'org.springframework.boot:spring-boot-starter-security'
+      * Spring Security 사용을 위해
+    * implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+      * View에서 현재 로그인된 사용자의 정보를 가져오기 위해
+  * 어노테이션 정리
+    * @RequiredArgsConstructor 
+      * Lombok 라이브러리에서 제공하는 어노테이션
+      * 추가 작업을 필요로 하는 필드에 대한 생성자 생성
+      * 초기화 되지 않은 모든 final 필드, @NonNull로 마크돼있는 모든 필드들에 대한 생성자를 자동으로 생성
+    * @EnableWebSecurity
+      * Spring Security 사용을 위한 어노테이션
+      * 웹 보안을 활성화
+      * 스프링 시큐리티가 WebSecurityConfigurer 구현하거나 컨텍스트의 WebSebSecurityConfigurerAdapter를 확장한 빈으로 설정되어 있어야 함.
+      * tip : WebSebSecurityConfigurerAdapter를 확장하여 클래스를 설정하는 것이 가장 편하고 자주 쓰임.
+    * @Configuration
+      * Spring에서 Bean 등록하기 위한 어노테이션
+      * 1개 이상 Bean 등록하고 있음을 명시
+      * @Bean을 사용하는 클래스에는 반드시 해당 어노테이션을 활용하여 해당 클래스에 Bean을 등록하고자 함을 명시해주어야 함
+
+* Web Security
+  * web.ignoring().antMatchers  
+    * Spring 보안
+    * css, js, img는 무조건 접근이 가능해야 하기 때문에 설정된 모든 파일은 모든사람이 사용가능(인증무시) 
+      * ex ) web.ignoring().antMatchers("/css/**", "/js/**", "/img/**");
+* HttpSecurity
+  * HTTP 관련 인증 설정 가능
+  * http.authorizeRequests()
+    * 경로, 권한 설정
+    * antMatchers에서 설정한 사용자만이 사용가능 (인증됨)
+      * .antMatchers("/login", "/signup", "/user").permitAll() : 누구나 접근 가능
+      * .antMatchers("/").hasRole("USER") : USER, ADMIN만 접근 가능

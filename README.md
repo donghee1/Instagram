@@ -80,7 +80,7 @@
   <img width="1037" alt="2차 테이블 수정" src="https://user-images.githubusercontent.com/48265181/128623269-9ee0bd07-158b-4e65-acae-30d05764de35.png">
   
 * Spring Security
-  * build.gradel에서 의존성 추가
+  * build.gradle에서 의존성 추가
     * implementation 'org.springframework.boot:spring-boot-starter-security'
       * Spring Security 사용을 위해
     * implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
@@ -112,3 +112,61 @@
     * antMatchers에서 설정한 사용자만이 사용가능 (인증됨)
       * .antMatchers("/login", "/signup", "/user").permitAll() : 누구나 접근 가능
       * .antMatchers("/").hasRole("USER") : USER, ADMIN만 접근 가능
+      * .antMatchers("/admin").hasRole("ADMIN") : ADMIN만 접근 가능
+      * .anyRequest().authenticated() : 나머지 요청들은 권한의 종류에 상관 없이 권한이 있어야 함
+  * http.formLogin()
+    * 로그인 페이지, 기타 로그인 처리 및 성공 실패 처리를 위해
+      * .loginPage("/login") : 개발자가 따로 만든 로그인 페이지를 사용하려고 할때 설정 (따로 설정하지 않으면 스프링이 제공하는 기본 로그인페이지 호출 "/login")
+      * .defaultSuccessUrl("/") : 로그인 성공 시 이동되는 주소
+  * http.logout()  
+    * 로그아웃 처리를 위해
+      * .logoutSuccessUrl("/login") : 로그아웃 성공 시 이동되는 주소
+      * .invalidateHttpSession(true) : 로그아웃 성공 후 세션 전체 삭제 여부
+
+* Thymeleaf
+  * 개념
+    * JAVA 라이브러리
+    * 환경 양쪽에서 TEXT, HTML, XML, JavaScript, CSS를 생성할 수 있는 템플릿 엔진
+    * Web Application에서 View 계층에 적합하지만, 오프라인 환경에서 많은 형태로 처리 가능
+    * Spring MVC와의 통합 모듈 제공, Application에서 JSP로 만든 기능들을 완전히 대체 가능
+  * 목표
+    * 세련되고 잘다듬어진 템플릿 제공
+    * Standard와 SpringStandard를 통해 강력하고 자연스러운 템플릿을 만들어낼 수 있어 정적 프로토타입도 브라우저에서 정확하게 동작
+    * Dialect를 개발하여 타임리프 확장 가능
+  * 사용이유
+    * XML, XHTML, HTML5를 위한 자바 템플릿 엔진이며 다른 템플릿 포멧으로 확장 가능
+    * 웹과 비웹 양쪽 환경에서 동작, 서블릿 API에 대한 강한 의존성 없음
+    * 방언Dialects라고 불리는 기능 셋 모듈 기반
+    * 다양한 템플릿 모드 제공
+    * 완벽하고 확장 가능한 국제화 지원
+    * 높은 성능의 파싱된 템플릿 캐시를 설정하여 입,출력을 줄여 최소화
+    * 자동으로 DOCTYPE 번역
+    * 필요시 템플릿 엔진 프레임워크 사용가능
+    * 다양한 예제 애플리케이션을 포함한 문서화 제공
+
+* OAuth 프로토콜
+  * 개념
+    * 인증과 인가가 핵심
+    * Resource Server는 Resource Owner에게 인증을 받음 --> 해당 Client가 Resource에 접근할 수 있는지 확인
+    * 인증된 Client는 자신의 목적에 따라 허용된 정보에만 접근가능
+    * Client : Resource에 접근하려고 하는 주체
+    * Resource : 서비스 제공자에 저장된 정보
+    * Resource Owner : 커뮤니티 사용자
+    * Resource Server : Resource를 가지고 있는 서버
+  * 동작흐름
+    * 1. Service Provider에 Client 정보 등록
+      * 보통 Service Provider에서 계정 생성후 사용 등록 --> Client별로 고유로 식별할 수 있는 Client Id와 Secret Kye 생성
+    * 2. Client의 인증 요청 & 권한 부여 요청  
+      * Service provider에 권한 부여를 위해 Resource Owner의 승인을 요청
+    * 3. 인증 성공 시 Authentication Code 부여
+      * Resource Owner가 인증, 권한 사용 승인 --> Service Provider의 인증 서버는 Access Token을 발행받기 위한 Authentication Code를 302 상태 코드를 통해 
+        Resource Owner가 모르게 슬쩍 Client에게 전달
+    * 4. Access Token 발행 요청
+      * Authentication Code를 발급 받을때 사용했던 Redirect Url, Resource Owner에게 받은 인가 코드를 가지고 Access Token을 발행 요청
+    * 5. 리소스에 접근 요청
+      * Client는 Token을 통해 Resource Server에서 사용자의 정보에 접근
+      * 참고 : Access Token이 저장된 DB에 비교하여 지정된 Scope에 접근하는 게 맞는지 확인 후에 반환,보통 요청 헤더에 많이 셋팅 (Authorization: Bearer <ACCESS TOKEN>)
+    * 6. Access Token 재발급 요청
+       * Access Token이 만료 --> Refresh Token을 통해 새로 발급 가능
+       * Access Token 발급시 보통 expires라는 항목으로 유효시간 받음 --> 유호시간 확인 가능하며, 지나면 Refresh Token으로 재발급
+ 

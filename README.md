@@ -170,3 +170,23 @@
        * Access Token이 만료 --> Refresh Token을 통해 새로 발급 가능
        * Access Token 발급시 보통 expires라는 항목으로 유효시간 받음 --> 유호시간 확인 가능하며, 지나면 Refresh Token으로 재발급
  
+ #### 2021.08.10
+  * Lombok
+    * 웹 애플리캐이션에 사용되는 VO 객체들을 DB 컬럼과 맞게 private 변수화 하여 getter/setter 메서드로 정의한 후 toString으로 추가 정의한다.
+    * 프로젝트가 커질수록 사용되는 VO 객체들은 기하급수적으로 늘어나고, 관리가 힘들어져 위 같은 일련의 과정을 자동화한 라이브러리가 Lombok이다.
+  * 설치방법
+    * 외부 의존성처리를 위한 라이브러리 설정
+    * 또한 동작을 위한 .jar 파일을 다운 및 적용(우선 로컬적용) -> https://projectlombok.org/download
+    * jar 파일 실행
+    * 인스톨 화면에서 Specify location 클릭
+    * STS/eclipse/springtoolsuit4.ini 파일 경로 설정 후 퀵 인스톨 실행
+    * .ini 파일을 열어 Lombok.jar 가 추가됬는 지 확인 > -javaagent:/Users/donghee/Downloads/SpringToolSuite4.app/Contents/Eclipse/lombok.jar
+  * 사용방법
+    * 자주사용하는 애노테이션
+    * @toString : 투스트링 메서드를 생성한다.@ToString(exclude={“제외값”}) 으로 재외할 문자열을 설정할 수 있다.
+    * @Getter/Setter : getter/setter 메서드를 생성한다.
+    * @EqualsAndHashCode : equals(), hashCode() 메소드를 생성한다.
+    * @RequiredArgsConstructor : 모든 멤버 변수를 초기화시키는 생성자를 생성한다.
+    * @Data : 위에 언급한 5가지 어노테이션 설정을 모두 포함한다.
+    * 공식 라이브러리 : https://projectlombok.org/features/all
+ 

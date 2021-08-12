@@ -190,3 +190,31 @@
     * @Data : 위에 언급한 5가지 어노테이션 설정을 모두 포함한다.
     * 공식 라이브러리 : https://projectlombok.org/features/all
  
+ #### 2021.08.12
+* Spring Boot 프로젝트 테스트 코드
+  * localhost 8080 연결 거부
+    * 원인 : application.properties에서 spring.main.web-application-type=none 추가로 인한 연결거부
+    * 해결 : spring.main.web-application-type=none 주석처리
+  * private final UserService userService;시 에러
+    * 원인 : Lombok 라이브러리에서 제공하는 @RequiredArgsConstructor 미추가
+    * 해결 : @RequiredArgsConstructor 추가
+  * Security 적용 후 Redis 로컬연동 테스트 중 http://localhost:8080/redis 호출시 http://localhost:8080/login만 호출
+    * 에러내용 : Failed to authorize filter invocation [GET /redisTest] with attributes [authenticated]
+    * 원인 : http.authorizeRequests().antMatchers.("/login","/user","/admin").permitAll()으로 되어있어 /redis 대한 접근 막혀있음
+    * 해결 : ("/login","/user","/admin")에서 ("/**")로 변경 
+  * 위 antMatch 적용 후 미반영
+    * 원인 : @EnableWebSecurity 어노테이션 미추가
+    * 해결 : @EnableWebSecurity 추가하여 스프링시큐리티 사용
+* Spring Boot와 Redis 로컬 연동
+  * build.gradle 의존성 추가
+      * implementation 'org.springframework.boot:spring-boot-starter-data-redis' 
+  * application.properties에 redis 정보 추가
+      * spring.cache.type=redis
+      * spring.redis.host=localhost
+      * spring.redis.port=6379
+  * 연동테스트(get, set)를 위한 Controller, Config 샘플 코드 개발
+      * http://localhost:8080/redisTest 호출시 test(key), success(value) SET
+          * keys * 로 확인
+          <img width="202" alt="스크린샷 2021-08-12 오후 9 25 57" src="https://user-images.githubusercontent.com/48265181/129197449-06373722-d82c-48d4-ab35-63e70a84623c.png">
+       * http://localhost:8080/redis/{key} 호출시 value값 조회
+          <img width="642" alt="스크린샷 2021-08-12 오후 9 26 12" src="https://user-images.githubusercontent.com/48265181/129198192-11edf9ff-0d92-4a85-bbbd-47d42c663a08.png">

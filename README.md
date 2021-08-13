@@ -218,3 +218,35 @@
           <img width="202" alt="스크린샷 2021-08-12 오후 9 25 57" src="https://user-images.githubusercontent.com/48265181/129197449-06373722-d82c-48d4-ab35-63e70a84623c.png">
        * http://localhost:8080/redis/{key} 호출시 value값 조회
           <img width="642" alt="스크린샷 2021-08-12 오후 9 26 12" src="https://user-images.githubusercontent.com/48265181/129198192-11edf9ff-0d92-4a85-bbbd-47d42c663a08.png">
+
+ 
+ #### 2021.08.13
+* MariaDB 로컬 연동
+  * build.gradle 파일 의존성 추가
+       - implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+       - runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+  * application.properties 수정
+      spring.datasource.driverClassName=org.mariadb.jdbc.Driver
+      spring.datasource.url=jdbc:mariadb://localhost:3306/hyj?characterEncoding=UTF-8&serverTimezone=UTC
+      spring.datasource.username=root
+      spring.datasource.password=admin
+* Mybatis 매핑
+  * build.gradle 파일 의존성 추가
+       - implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+  * application.properties 수정
+       - mybatis.type-aliases-package=h.project.vo (매핑 정보)
+       - mybatis.mapper-locations=mapper/**/*.xml (매퍼 xml파일 경로지정)
+       - mybatis.configuration.map-underscore-to-camel-case=true
+* 로그인 부분
+  * Security를 이용한 로그인 구현
+    * Controller, DAO, Repository, Service, Role 구현 진행중
+        - user_id(USER테이블 아이디)로 Role 권한 설정
+           ADMIN : 관리자
+           USER : 사용자
+* 회원가입 부분
+  * Security를 이용한 회원가입 구현
+    * Controller, DAO, Repository, Service, Dto 구현 진행중
+    - 암호화 처리
+    - valid 처리
+    - 회원가입 테스트 html 작성
+  * 테스트 진행 후 추가 작성 예정

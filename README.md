@@ -290,4 +290,48 @@
       * <img width="1513" alt="웹" src="https://user-images.githubusercontent.com/48265181/129522738-be1ac4d2-fcd3-490a-b2c1-ba7e053e3e09.png"> 
 
  #### 2021.08.16
+ * 간단한 로그인 구현
+   * Config 구현 
+      * 로그인 처리를 하기 위해 AuthenticationManagerBuilder 설정
+      * AuthenticationManagerBuilder : Spring Security의 모든 인증을 관리하는 AuthenticationManager를 생성하는 class
+      * passwordEncoder : Bean으로 등록한 passwordEncoder()를 사용하겠다는 설정
+   * UserInfo 구현
+      * 회원의 아이디로 사용될 userId, 비밀번호로 사용될 userPassword 생성
+      * @Entity
+          * 객체와 테이블 매핑 (JPA가 관리)
+      * @Table(name = "USER")
+          * Entity와 매핑할 테이블 지정 (name : 테이블명)
+      * @NoArgsConstructor(access = AccessLevel.PROTECTED)
+          * 기본 생성자 자동 추가
+          * 기본생성자의 접근 권한을 protected로 제한
+          * Entity 클래스를 project 코드에서 기본생성자로 생성하는 것은 막되, JPA에서 Entity클래스를 생성하는 것은 허용
+      * @GeneratedValue(strategy = GenerationType.IDENTITY)
+          * 키본 키 생성을 DB에 위임(AUTO_INCREMENT 와 같음)
+      * @Column(name = "user_id")
+          * 객체 필드를 테이블 컬럼에 매핑 (name : 컬럼명)
+      * @Builder
+          * Model 객체 생성시 Builder을 자동으로 추가 
+   * Repository 구현
+      * JpaRepository<> 상속받아 Repository 생성, UserDetailService에서 userId로 회원을 검색할 수 있도록 메서드를 정의
+   * Service 구현
+       * 로그인을 위해 MaraDB에서 가입된 user정보 조회
+       * userId에 따라 admin, user 권한 부여
+ * 로그인 테스트시 에러 발생
+   * 에러 내용
+      * JpaSystemException: No default constructor for entity
+   * 에러 원인
+      * 로직 수정 시 UserInfo에서 @NoArgsConstructor(access = AccessLevel.PROTECTED) 삭제
+      * @Builder 사용시 @NoArgsConstructor 나 @AllArgsConstructor 사용해야 함
+   * 에러 해결
+      * @NoArgsConstructor(access = AccessLevel.PROTECTED) 추가 후 정상로그인 확인
+ * 로그인 테스트 화면
+   * USER 테이블에 회원정보 없거나 비밀번호가 일치 하지 않을 시 http://localhost:8080/user/login?error 
+   * 성공시 임시로 http://localhost:8080/maria 이동
+   * 로그인 index 화면
+      * <img width="496" alt="로그인화면" src="https://user-images.githubusercontent.com/48265181/129528246-f720537c-c53a-4054-a858-953b63ef1f10.png">
+   * 로그인 실패 화면
+      * <img width="538" alt="에러시" src="https://user-images.githubusercontent.com/48265181/129528300-33c2f5c5-57f9-49f7-99a7-be7f11e51d7b.png">
+   * 로그인 성공 시
+      * <img width="1106" alt="성공시" src="https://user-images.githubusercontent.com/48265181/129528445-bccddcae-f837-4931-a55c-548ae994f22f.png">
+ 
  

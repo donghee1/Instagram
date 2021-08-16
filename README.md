@@ -250,3 +250,44 @@
     - valid 처리
     - 회원가입 테스트 html 작성
   * 테스트 진행 후 추가 작성 예정
+ 
+#### 2021.08.14
+ * DB ERD 수정 (3차)
+   * 더미데이터 insert시 에러 발생
+      * 에러 내용
+          * Cannot add or update a child row: a foreign key constraint fails (`hyj`.`user`, CONSTRAINT `FK_USER_FOLLOWER_TO_USER_1` FOREIGN KEY (`follower_id`) REFERENCES `USER_FOLLOWER` (`follower_id`))
+      * 에러 원인
+          * foreign key로 설정되어 있는 테이블에 데이터가 없어 발생한 오류
+      * 해결 내용
+          * USER테이블에서 foreign key로 되어있는 테이블은 데이터가 없어도 참조만 하므로 식별관계에서 비식별 관계로 수정 후 insert 성공 확인
+   * 각 테이블 시퀀스의 경우 인덱스 자동 증가를 위해 DDL을 사용하며 AUTO_INCREMENT 속성 추가
+      * SQL 문법
+          * ALTER TABLE {테이블명} MODIFY {컬럼명} INT NOT NULL AUTO_INCREMENT;
+   * <img width="1232" alt="3차 테이블 수정" src="https://user-images.githubusercontent.com/48265181/129521968-682f8c1f-d843-4741-9105-eda5ff65f252.png">
+ * thymeleaf 적용
+   * application.properties 수정
+      * spring.thymeleaf.enabled=true
+      * spring.thymeleaf.prefix=classpath:/templates/
+      * spring.thymeleaf.suffix=.html
+      * spring.thymeleaf.mode=HTML5
+      * spring.thymeleaf.cache=false
+   * build.gradle 의존성 추가
+      * implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+   * 적용 시 에러 발생
+      * template might not exist or might not be accessible by any of the configured Template Resolvers
+          * 문법오류 제일 포괄적임 (html 내 th:replace other:html 생성으로 인한 에러가 1개 이상일 경우)
+      * org.thymeleaf.exceptions.TemplateInputException: An error happened during template parsing (template: "class path resource [templates/account.html]")
+          * th:replace 사용 시 발생하는 에러. 리플레이스 경로에 파일이 없어서 발생
+      * template might not exist or might not be accessible by any of the configured Template Resolvers (template: "account" - line 4, col 7)
+          * 참조하던 html 파일에서 로직상에 <header></header><footer></footer><body></body> 3태그에서 th:replace 가 설정되어 있었고, 그로인해 마이트 및 파싱 에러 발생
+ * Mybatis를 이용하여 간단한 SELECT 테스트
+   * DTO, Mapper, VO를 이용하여 List 출력 테스트
+   * SQL 문법 
+      * SELECT * FROM USER
+   * MariaDB SELECT 화면
+      * <img width="1169" alt="DB 화면" src="https://user-images.githubusercontent.com/48265181/129522678-23bfcb47-441e-486d-84fa-4afa0b4ed46a.png">
+   * http://localhost:8080/maria 호출 화면
+      * <img width="1513" alt="웹" src="https://user-images.githubusercontent.com/48265181/129522738-be1ac4d2-fcd3-490a-b2c1-ba7e053e3e09.png"> 
+
+ #### 2021.08.16
+ 

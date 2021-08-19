@@ -335,3 +335,42 @@
       * <img width="1106" alt="성공시" src="https://user-images.githubusercontent.com/48265181/129528445-bccddcae-f837-4931-a55c-548ae994f22f.png">
  
  
+ #### 2021.08.19
+ * 로그인
+   * 소셜 로그인 진행
+   * 1. kakao REST API 연동을 위한 애플리케이션 신청
+   * 2. kakao REST API 연동을 위한 application.properties 추가
+     spring.security.oauth2.client.registration.kakao.client-id=13396affec7c4b602ce59a9d9be4c8df
+     spring.security.oauth2.client.registration.kakao.client-secret=3o9qmFBiHKrgzgKWsdcApPCio8b5j9Ze
+     spring.security.oauth2.client.registration.kakao.redirect-uri=http://localhost:8080/login/oauth2/code/kakao
+     spring.security.oauth2.client.registration.kakao.authorization-grant-type=authorization_code
+     spring.security.oauth2.client.registration.kakao.scope=account_email
+     spring.security.oauth2.client.registration.kakao.client-name=kakao
+     spring.security.oauth2.client.registration.kakao.client-authentication-method=POST
+
+     spring.security.oauth2.client.provider.kakao.authorization-uri= https://kauth.kakao.com/oauth/authorize
+     spring.security.oauth2.client.provider.kakao.token-uri=https://kauth.kakao.com/oauth/token
+     spring.security.oauth2.client.provider.kakao.user-info-uri=https://kapi.kakao.com/v2/user/me
+     spring.security.oauth2.client.provider.kakao.user-name-attribute=id
+
+    * 3. secuity와 oauth2를 이용한 kakao 연동
+      .oauth2Login() //ouath2 로그인을 위해
+      .defaultSuccessUrl("/maria") //oauth2 인증 성공시 이동될 url(임시)
+      /*로그인 성공시 유저정보를 가지고 userservice에서 처리*/
+      .userInfoEndpoint()
+      .userService(userservice);
+    * 4. Attributes, UserInfo, Dto, Repository, Service 연동테스트 로직개발
+         - 로그인 화면까지는 노출되나 아이디, 비밀번호 입력 후 로그인하면 500에러 발생
+      원인파악중
+    * 5. Maria DB 연동로직에 소셜로그인 로직 추가하니 마리아DB에 있는 로그인정보로 
+         로그인실패되는 현상 발생
+         원인파악중
+ * 회원가입
+   * 임시 회원가입 페이지 연동
+   * 기존 ajax 방식과는 다르게 springboot + spring security + 타임리프 를 사용하여 통신
+   * th:action 부분에 회원가입 인터페이스 mapping 정보 저장
+   * 저장할 데이터들은 input에 th:field 값을 추가하여 값을 전달받아 컨트롤러에 보내준다.
+   * spring security 에서 문제발생
+   * 맨 처음 회원가입 후 시큐리티에서 제공하는 암호화를 password 적용하는 데 성공
+   * 이후 추가 가입 시 비밀번호 에러 발생
+   * 원인 파악 중

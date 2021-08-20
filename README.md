@@ -374,3 +374,40 @@
    * 맨 처음 회원가입 후 시큐리티에서 제공하는 암호화를 password 적용하는 데 성공
    * 이후 추가 가입 시 비밀번호 에러 발생
    * 원인 파악 중
+ 
+ #### 2021.08.20
+* 소셜로그인 구현
+   * kakao 로그인
+       * 에러 내용
+           * 잘못된 요청입니다. (KOE205)
+       * 에러 원인
+           * spring.security.oauth2.client.registration.kakao.scope 부분에 해당되지 않은 정보추가하여 발생
+       * 해결 내용
+           * 수정전
+	          	- spring.security.oauth2.client.registration.kakao.scope=account_email, profile
+           * 수정후
+	          	- spring.security.oauth2.client.registration.kakao.scope=profile_nickname,account_email,profile_image
+   * Maria DB 연동로직에 소셜로그인 로직 추가하니 마리아DB에 있는 로그인정보로 로그인실패되는 현상 발생
+       * 에러 내용
+           * SQL Exception 발생
+       * 에러 원인
+           * 소셜로그인에 필요한 객체를 @Column선언하니 마리아DB에 해당 컬럼이 없어 발생한 문제
+           * 마리아DB와 동일한 정보를 가지고 있는 컬럼으로 변경하니 마리아DB, 카카오 로그인 모두 성공
+
+   * Facebook 로그인
+       * properties 추가
+           * spring.security.oauth2.client.registration.facebook.client-id=527316975006896 (앱ID)
+           * spring.security.oauth2.client.registration.facebook.client-secret=532b6844dcc14809b9f4b38bbce85a7c (앱 시크릿 코드)
+           * spring.security.oauth2.client.registration.facebook.scope=public_profile,email
+           * spring.security.oauth2.client.provider.facebook.user-info-uri=https://graph.facebook.com/me?fields=email,name,locale
+       * Facebook 연동은 되나 안전하지 않은 페이지에서 액세스 토큰을 가져오거나 이 앱에 로그인할 수 없습니다. https://로 페이지를 새로 고쳐보세요 오류리턴
+           * 원인 : SSL 인증서가 없어 발생한 원인으로 파악
+           * 개발테스트를 위한 오픈SSL이나 구글로그인으로 대체할 에정
+* 회원가입 진행상황
+   * springSecurity + mariaDB 연동 성공
+   * 소셜 회원가입 진행중
+       * DB Error 연결 중 문제발생
+          * 테이블을 찾지 못한다는 에러 발생 
+          * 확인결과 DB명.dao class 명으로 설정되어 있음. -> DB명.user table명으로 설정되어야함
+          * 해결방안 : dao @Table(name="user") 로 테이블 설정 후 실행.
+ 

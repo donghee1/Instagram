@@ -413,13 +413,13 @@
 
 #### 2021.08.21
 * Cloud Computing Setting
-  ** AWS EC2 및 RDS 설정
+  * AWS EC2 및 RDS 설정
 * EC2
-  ** EC2 생성
-    *** java 1.8 jdk 설치
-    *** timezone 설정
-    *** git 설치 및 instagram 프로젝트 clone
-    *** 빌드 테스트 중 에러발생 -> jdk 문제로 확인 추가 확인 중
+  * EC2 생성
+    * java 1.8 jdk 설치
+    * timezone 설정
+    * git 설치 및 instagram 프로젝트 clone
+    * 빌드 테스트 중 에러발생 -> jdk 문제로 확인 추가 확인 중
 
 * RDS
   * RDS 생성

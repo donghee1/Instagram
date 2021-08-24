@@ -664,7 +664,7 @@
       * USER테이블에 해당계정(user_email)이 없을 경우 insert, 존재할 경우 인스타 View 페이지 노출
       * 1. user_email이 없을 경우 추가정보 입력할 페이지 추가
       * 2. 소셜에서 전달받은 profile, email, nickname, gender 정보와 추가입력한 정보를 USER 테이블에 INSERT
-   	case1 : Redis 캐시서버를 두고 소셜로그인 정보를 저장 —> Redis를 통해 select —> 추가정보 페이지에서 정보 입력 후 가공하여 DB INSERT
-	case2: Cache를 이용하여 DB INSERT
+          * case1 : Redis 캐시서버를 두고 소셜로그인 정보를 저장 —> Redis를 통해 select —> 추가정보 페이지에서 정보 입력 후 가공하여 DB INSERT
+          * case2 : Cache를 이용하여 DB INSERT
       * 3. 회원가입은 JPA를 통해 email값 중복체크
   * Google 로그인 로컬 테스트시 성공확인.

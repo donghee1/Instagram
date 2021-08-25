@@ -721,3 +721,18 @@
   * 대중적인 언어에는 대부분 ORM 기술이 존재한다.
   * ORM은 객체와 RDB 두 기둥 위에 있는 기술 이다.
 
+#### 2021.08.24
+* mariaDB에 테이블 생성
+  * 기본키 및 user테이블의 user_email 컬럼은 유니크키 설정
+  * 로그인 테스트를 위한 더미데이터 insert
+* Entity부분 로직 수정 후 원복
+  * 기존 DB컬럼명과 동일하게 변수 선언 시 에러 발생
+  * 원인 : underscore(_)를 엔티티의 레퍼런스 필드의 프로퍼티를 조회하는 예약어로 사용하고 있기 때문에
+  * 해결방안 @Column(name = 컬럼명) private String userEmail; 형식으로 원복
+* 소셜로그인 후 MariaDB에 데이터가 없을 시 추가정보 입력 후 DB INSERT하는 로직 구현
+  * UserService 추가
+    * Optional<UserInfo> emailcheck = userRepository.findByuserEmail(attributes.getEmail());
+    * boolean email = emailcheck.isPresent();
+    - 로그인은 정상으로 동작되지만 isPresent()사용하여 DB에 attributes로 받은 email정보가 없다면 false, 있다면 true return 확인
+  * email의 값이 true면 성공페이지로, false면 추가정보입력하는 html로 이동될 수 있도록 구현중
+

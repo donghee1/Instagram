@@ -721,7 +721,7 @@
   * 대중적인 언어에는 대부분 ORM 기술이 존재한다.
   * ORM은 객체와 RDB 두 기둥 위에 있는 기술 이다.
 
-#### 2021.08.24
+#### 2021.08.25
 * mariaDB에 테이블 생성
   * 기본키 및 user테이블의 user_email 컬럼은 유니크키 설정
   * 로그인 테스트를 위한 더미데이터 insert
@@ -735,4 +735,27 @@
     * boolean email = emailcheck.isPresent();
     - 로그인은 정상으로 동작되지만 isPresent()사용하여 DB에 attributes로 받은 email정보가 없다면 false, 있다면 true return 확인
   * email의 값이 true면 성공페이지로, false면 추가정보입력하는 html로 이동될 수 있도록 구현중
+
+#### 2021.08.25
+* 회원가입
+  * 중복 이메일 처리
+    * JPA .save 사용하여 DB에 insert 작업 시 덮어쓰기 발생(update)
+    * 문서 참고 : .save () 가 삽입과 업데이트 모두에 사용된다는 것을 알고 계신 것 같습니다. Id가 존재하지 않으면 삽입으로 간주되고 Id가 존재하면 업데이트로 간주됩니다. Id를 null로 보내면 예외가 발생할 수 있습니다. id 변수에 @Id 외에 다른 주석이 없기 때문에 고유 ID 생성은 code로 처리해야합니다. 그렇지 않으면 다음을 수행해야합니다. @GeneratedValue 주석을 사용하십시오.
+    * sid 값 추가 및 @Id 변경
+    * 중복값은 유니크 키로 에러토록 벼경
+    * validate 할 메서드 구현 중
+* EC2
+  * Redis 설치
+* 소셜로그인 후 MariaDB 데이터 비교 성공
+  * Service 수정
+    * Optional에서 제공해주는 isPresent() 값에 따라 false면 추가가입 화면, true면 성공페이지 화면 노출
+    * httpSession.setAttribute을 통해 emailYn키값에 boolean 값 넣기
+  * Controller 추가
+    * httpSession.getAttribute를 통해 조건문 추가
+    * emailYn키값에 따라 return값 구분
+* 추가가입할 수 있는 페이지 구현
+  * token 정보를 통해 소셜로그인 회원정보를 json 형태로 가지고옴
+    * 예시 = th:value="${#authentication.principal.attributes.kakao_account.email}"
+  * thymeleaf 적용
+  * 추가작성 후 Maria DB에 Insert하는 로직 구현중
 

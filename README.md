@@ -736,7 +736,7 @@
     - 로그인은 정상으로 동작되지만 isPresent()사용하여 DB에 attributes로 받은 email정보가 없다면 false, 있다면 true return 확인
   * email의 값이 true면 성공페이지로, false면 추가정보입력하는 html로 이동될 수 있도록 구현중
 
-#### 2021.08.25
+#### 2021.08.26
 * 회원가입
   * 중복 이메일 처리
     * JPA .save 사용하여 DB에 insert 작업 시 덮어쓰기 발생(update)
@@ -758,4 +758,18 @@
     * 예시 = th:value="${#authentication.principal.attributes.kakao_account.email}"
   * thymeleaf 적용
   * 추가작성 후 Maria DB에 Insert하는 로직 구현중
+	
+#### 2021.08.26
+* 회원가입
+  * JPA 적용중
+  * 함수 파악 및 로직 구성중
+  * 레디스 저장 로직 추가
+* 소셜로그인정보 DB INSERT
+  * 추가정보입력후 가입버튼 누를 시 token을 통해 전달받은 정보와 함께 INSERT
+  * 실제로 정보를 담고 있는 DTO객체 생성하여 Enttiy클래스에서 Build처리하여 insert 성공 
+* 자체로그인은 Security의 .invalidateHttpSession(true)를 통해 세션을 날려 로그아웃이 되지만 소셜로그인의 경우 로그아웃 안되는 문제 발생
+  * token 정보를 삭제해야할 것으로 추축되어 해당현상 파악중
+* Redis Lettuce를 이용하여 고유한 회원정보 hashes set,get하기 위한 로직 구현중
+  * 회원 비밀번호의 경우 보안문제로 redis 데이터에 존재 x (Maria DB에 저장되어있음)
+
 

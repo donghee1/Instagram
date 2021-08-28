@@ -759,7 +759,7 @@
   * thymeleaf 적용
   * 추가작성 후 Maria DB에 Insert하는 로직 구현중
 	
-#### 2021.08.26
+#### 2021.08.27
 * 회원가입
   * JPA 적용중
   * 함수 파악 및 로직 구성중
@@ -772,4 +772,18 @@
 * Redis Lettuce를 이용하여 고유한 회원정보 hashes set,get하기 위한 로직 구현중
   * 회원 비밀번호의 경우 보안문제로 redis 데이터에 존재 x (Maria DB에 저장되어있음)
 
+#### 2021.08.28
+* Redis Client
+  * 자바는 2가지의 Redis Client 지원 (Jedis, Lettuce)
+  * Spring Boot 2.0이 되고 Lettuce가 기본 클라이언트가 됨
+* Lettuce란?
+  * Netty(비동기 이벤터 기반 고성능 네트워크 프레임워크) 기반의 Redis  클라이언트
+  * 비동기로 요청을 처리하기 때문에 성능이 좋음
+  * Lettuce사용을 위해선 Config파일에 LettuceConnectionFactory(“reds 호스트”, “redis 포트”);와 같은 redisConnectionFactory를 Bean 등록필수
+* Jedis보다 Lettuce를 사용하는 이유
+  * 여러개의 쓰레드에서 단일 jedis 인스턴스를 공유할때 안전하지 않고 멀티쓰레드 환경에서 고려해야할 상황이 따름
+  * pooling과 같은 jedis-pool을 사용하는 것도 안전한 방법이지만 물리적인 비용의 증가가 따른다
+  * Lettuce는 Netty 라이브러리 위에서 구축되었고, connection 인스턴스를 여러 쓰레드에서 공유가 가능
+  * Spring Boot가 업그레이드됨에 따라 2.0 버전부터 Lettuce가 기본 클라이언트가 되었기 때문에 Jedis를 사용하기 위해서는 Lettuce를 exclude를 해주어야하는 불편함 발생
+  * Jedis에 비해 Lettuce의 성능이 더 높다.
 

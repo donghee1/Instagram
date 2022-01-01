@@ -10,5 +10,4 @@ import h.project.dao.UserInfo;
 @Repository("UserRepository")
 public interface UserRepository extends JpaRepository<UserInfo, Long> {
 	  Optional<UserInfo> findByEmail(String email);
-
 }

@@ -3,6 +3,8 @@ package h.project.dao;
 
 
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,8 +30,8 @@ import lombok.NoArgsConstructor;
 //Entity 클래스를 project 코드에서 기본생성자로 생성하는 것은 막되, JPA에서 Entity클래스를 생성하는 것은 허용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //implements Serializable
-public class UserLogin {
-	
+public class UserLogin{
+
 	@Id
 	// 키본 키 생성을 DB에 위임(AUTO_INCREMENT 와 같음)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
